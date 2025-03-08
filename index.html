@@ -102,17 +102,59 @@
         width: 60%;
     }
 
-    #guestList {
-        margin-top: 20px;
-        padding: 15px;
-        background: #f0f9f0;
-        border: 1px solid #16a085;
-        border-radius: 6px;
-        display: inline-block;
-        text-align: left;
-        min-width: 200px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+#guestList {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f0f9f0;
+    border: 1px solid #16a085;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: left;
+    min-width: 250px;
+    max-width: 90%;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-family: 'Arial', sans-serif;
+}
+
+/* ✨ Neon Glow Effect for the Guest List Header */
+#guestList h3 {
+    text-align: center; /* Centering */
+    font-size: 22px;
+    color: #16a085;
+}
+
+/* Smooth pulsing glow effect */
+@keyframes neonGlow {
+    0% {
+        text-shadow: 0 0 5px #16a085, 0 0 10px #1abc9c, 0 0 15px #0c9771;
     }
+    100% {
+        text-shadow: 0 0 8px #1abc9c, 0 0 12px #16a085, 0 0 18px #0c9771;
+    }
+}
+
+/* Style for each guest entry */
+.guest-entry {
+    padding: 8px 10px;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.guest-entry:last-child {
+    border-bottom: none;
+}
+
+/* Beautified Timestamp */
+.guest-time {
+    font-size: 14px;
+    color: #555;
+    display: block;
+    margin-top: 2px;
+    font-style: italic;
+}
   </style>
 </head>
 <body>
@@ -140,8 +182,8 @@
 
   <!-- Guest List -->
   <div id="guestList">
-    <h3>Guest List:</h3>
-    <ul id="guestNames"></ul>
+    <h3><span class="shamrock">☘️</span> Guest List <span class="shamrock">☘️</span></h3>
+    <div id="guestNames"></div>
   </div>
 </div>
 

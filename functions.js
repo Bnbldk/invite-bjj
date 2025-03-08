@@ -45,14 +45,24 @@ window.addGuest = function() {
     const guestInput = document.getElementById("guestName");
     const confirmButton = document.getElementById("confirmButton");
 
+    // Validate name length
+    if (guestInput.value.trim().length > 30) {
+        alert("⚠️ Name cannot exceed 30 characters!");
+        return;
+    }
+
     if (guestInput.value.trim() !== "") {
-        // Get timestamp
-        const timestamp = new Date().toLocaleString();
+        // Format Timestamp (📅 March 8, 2025 | 🕒 10:30 AM)
+        const formattedTimestamp = `📅 ${new Intl.DateTimeFormat('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        }).format(new Date())} | 🕒 ${new Intl.DateTimeFormat('en-US', {
+            hour: '2-digit', minute: '2-digit', hour12: true
+        }).format(new Date())}`;
 
         // Push to Firebase
         push(guestListRef, {
             name: guestInput.value,
-            time: timestamp
+            time: formattedTimestamp
         });
 
         // Disable button for 10 seconds
@@ -66,15 +76,24 @@ window.addGuest = function() {
     }
 };
 
-// Listen for changes in the guest list
+// Listen for changes in the guest list and auto-number guests
 onValue(guestListRef, (snapshot) => {
     const guestList = document.getElementById("guestNames");
     guestList.innerHTML = ""; // Clear list
+    let count = 1; // Start numbering guests
 
     snapshot.forEach((childSnapshot) => {
-      const guestData = childSnapshot.val();
-      const li = document.createElement("li");
-      li.textContent = `${guestData.name} (⏳ ${guestData.time})`;
-      guestList.appendChild(li);
+        const guestData = childSnapshot.val();
+
+        // Create a new div for guest entry
+        const guestDiv = document.createElement("div");
+        guestDiv.classList.add("guest-entry");
+
+        // Add guest number, name & formatted timestamp
+        guestDiv.innerHTML = `<strong>${count}.</strong> ${guestData.name} <br>
+                              <span class="guest-time">${guestData.time}</span>`;
+
+        guestList.appendChild(guestDiv);
+        count++; // Increment for next guest
     });
 });
