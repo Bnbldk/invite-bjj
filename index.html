@@ -136,27 +136,6 @@
         min-width: 200px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
-
-    /* Floating Likes */
-    .like-animation {
-        position: fixed;
-        bottom: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        pointer-events: none;
-    }
-
-    .icon {
-        position: absolute;
-        font-size: 24px;
-        animation: floatUp 1.5s ease-out forwards;
-    }
-
-    @keyframes floatUp {
-        0% { transform: translateY(0) scale(1); opacity: 1; }
-        100% { transform: translateY(-120px) scale(1.5); opacity: 0; }
-    }
-
   </style>
 </head>
 <body>
@@ -165,7 +144,7 @@
   <h1>☘️ Bruno's St. Paddy's Bash ☘️</h1>
   <p>Hey, alright ye, listen up! 🍻</p>
   <p>Since my birthday falls on the same day as St. Paddy’s, I thought, “Let’s celebrate early!”</p>
-  <p>So, I’m having a mighty craic at me gaff with me legendary mates**.</p>
+  <p>So, I’m having a mighty craic at me gaff with me legendary mates.</p>
 
   <p><strong>📅 Date:</strong> 16th of March</p>
   <p><strong>🕑 Time:</strong> 2:00 PM</p>
@@ -175,69 +154,35 @@
 
   <div class="leprechaun">🍀👨‍🦰💰</div>
 
-  <!-- Input para adicionar nome -->
+  <!-- Input for confirming attendance -->
   <div class="input-container">
     <input type="text" id="guestName" placeholder="Confirm your presence">
     <button class="ok-button" onclick="addGuest()">OK</button>
   </div>
 
-  <!-- Botão de like -->
+  <!-- Like Button -->
   <button class="like-button" onclick="showLikes()">💚 Like</button>
 
-  <!-- Contador de Likes -->
+  <!-- Like Counter -->
   <div id="likeCounter">Likes: 0</div>
 </div>
 
-<!-- Lista de convidados -->
+<!-- Guest List -->
 <div id="guestList">
   <h3>Guest List:</h3>
   <ul id="guestNames"></ul>
 </div>
 
-<div class="like-animation" id="likeAnimation"></div>
-
-<script>
-  let likeCount = 0;
-
-  function showLikes() {
-      likeCount++;
-      document.getElementById("likeCounter").innerText = "Likes: " + likeCount;
-
-      const likeContainer = document.getElementById("likeAnimation");
-
-      for (let i = 0; i < 8; i++) {
-          const icon = document.createElement("div");
-          icon.classList.add("icon");
-          icon.innerHTML = Math.random() > 0.5 ? "👍" : "❤️";
-          icon.style.left = Math.random() * 200 - 100 + "px";
-          icon.style.animationDuration = (1 + Math.random()) + "s";
-          likeContainer.appendChild(icon);
-
-          setTimeout(() => icon.remove(), 1500);
-      }
-  }
-
-  function addGuest() {
-      const guestInput = document.getElementById("guestName");
-      const guestList = document.getElementById("guestNames");
-
-      if (guestInput.value.trim() !== "") {
-          const li = document.createElement("li");
-          li.textContent = guestInput.value;
-          guestList.appendChild(li);
-          guestInput.value = "";
-      }
-  }
-</script>
-<!-- Adiciona Firebase via CDN -->
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
 
 <script>
-  // 🔥 Sua Configuração do Firebase
+  // Firebase Configuration with Realtime Database
   const firebaseConfig = {
       apiKey: "AIzaSyCrH4hvJwcznI4Amm_o5-ntRyyPc82Weo",
       authDomain: "invite-bjj.firebaseapp.com",
+      databaseURL: "https://invite-bjj-default-rtdb.firebaseio.com/",  // ✅ Corrected!
       projectId: "invite-bjj",
       storageBucket: "invite-bjj.appspot.com",
       messagingSenderId: "757480408480",
@@ -245,16 +190,14 @@
       measurementId: "G-7WY9GWH2MS"
   };
 
-  // Inicializa Firebase
+  // Initialize Firebase
   const app = firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  let likeCount = 0;
-
-  // Carregar dados iniciais do Firebase
+  // Load initial data
   function loadData() {
       db.ref("likes").on("value", (snapshot) => {
-          likeCount = snapshot.val() || 0;
+          const likeCount = snapshot.val() || 0;
           document.getElementById("likeCounter").innerText = `Likes: ${likeCount}`;
       });
 
@@ -269,13 +212,13 @@
       });
   }
 
-  // Salvar curtidas no Firebase
+  // Save likes safely
   function showLikes() {
-      likeCount++;
-      db.ref("likes").set(likeCount);
+      const likesRef = db.ref("likes");
+      likesRef.transaction((currentLikes) => (currentLikes || 0) + 1);
   }
 
-  // Adicionar nome do convidado no Firebase
+  // Save guest name
   function addGuest() {
       const guestInput = document.getElementById("guestName");
       if (guestInput.value.trim() !== "") {
@@ -284,8 +227,11 @@
       }
   }
 
-  // Carregar dados ao abrir a página
-  window.onload = loadData;
+  // Load data on page load
+  document.addEventListener("DOMContentLoaded", function () {
+      loadData();
+  });
 </script>
+
 </body>
 </html>
