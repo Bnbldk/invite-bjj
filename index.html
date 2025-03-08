@@ -21,6 +21,7 @@
         max-width: 500px;
         margin: 50px auto;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        position: relative;
     }
     .like-button, .ok-button {
         background-color: #16a085;
@@ -74,7 +75,6 @@
   <ul id="guestNames"></ul>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
 
@@ -86,49 +86,26 @@
       projectId: "invite-bjj",
       storageBucket: "invite-bjj.appspot.com",
       messagingSenderId: "757480408480",
-      appId: "1:757480408480:web:fad6c213de6f70ff1e88dd"
+      appId: "1:757480408480:web:fad6c213de6f70ff1e88dd",
   };
 
   const app = firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
   function loadData() {
-      const likesRef = db.ref("likes/count");
-
-      likesRef.on("value", (snapshot) => {
+      db.ref("likes").on("value", (snapshot) => {
           document.getElementById("likeCounter").innerText = `Likes: ${snapshot.val() || 0}`;
       });
 
-      const guestsRef = db.ref("guests");
-      guestsRef.on("value", (snapshot) => {
+      db.ref("guests").on("value", (snapshot) => {
           const guestList = document.getElementById("guestNames");
           guestList.innerHTML = "";
-          snapshot.forEach((child) => {
+          snapshot.forEach(child => {
               const li = document.createElement("li");
               li.textContent = child.val();
               guestList.appendChild(li);
           });
       });
-  }
-
-  function showLikes() {
-      const likesRef = db.ref("likes/count");
-
-      likesRef.transaction((currentLikes) => {
-          return (currentLikes || 0) + 1;
-      }).then(() => {
-          console.log("✅ Like added!");
-      }).catch((error) => {
-          console.error("❌ Error updating likes:", error);
-      });
-  }
-
-  function addGuest() {
-      const guestInput = document.getElementById("guestName");
-      if (guestInput.value.trim() !== "") {
-          db.ref("guests").push(guestInput.value);
-          guestInput.value = "";
-      }
   }
 
   document.addEventListener("DOMContentLoaded", loadData);
