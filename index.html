@@ -5,14 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bruno's St. Paddy's Bash ☘️</title>
   <style>
+    /* Smooth Scrolling Effect */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Background Parallax Effect */
     body {
         background: linear-gradient(to right, #e6f9e6, #d4edda);
         color: #1e392a;
         font-family: 'Courier New', monospace;
         text-align: center;
         padding: 20px;
+        transition: background 0.5s ease-in-out;
         overflow-x: hidden;
+        perspective: 1000px;
     }
+
+    /* Floating Effect for the Invite */
     .invite-box {
         background: white;
         border: 2px solid #16a085;
@@ -22,33 +32,95 @@
         margin: 50px auto;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         position: relative;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        transform-style: preserve-3d;
     }
-    .like-button, .ok-button {
+
+    .invite-box:hover {
+        transform: translateY(-5px) rotateX(5deg);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+        font-size: 26px;
+        color: #16a085;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Animated Leprechaun */
+    .leprechaun {
+        font-size: 40px;
+        margin: 10px 0;
+        animation: floatLeprechaun 2s infinite alternate ease-in-out;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    /* Leprechaun jumps when scrolling */
+    @keyframes floatLeprechaun {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-5px); }
+    }
+
+    /* Interactive Input and Button */
+    .input-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        align-items: center;
+        gap: 10px;
+    }
+
+    input {
+        background: #e6f9e6;
+        border: 1px solid #16a085;
+        padding: 10px;
+        color: #1e392a;
+        font-family: 'Courier New', monospace;
+        border-radius: 6px;
+        text-align: center;
+        width: 60%;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    input:focus {
+        box-shadow: 0 0 10px #16a08588;
+        outline: none;
+    }
+
+    .ok-button, .like-button {
         background-color: #16a085;
         color: white;
         font-size: 16px;
-        padding: 10px 20px;
+        padding: 10px 15px;
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        margin-top: 20px;
-        transition: 0.3s;
+        transition: transform 0.3s, background-color 0.3s;
     }
+
+    .ok-button:hover, .like-button:hover {
+        background-color: #1abc9c;
+        transform: scale(1.05);
+    }
+
     #likeCounter {
         margin-top: 10px;
         font-size: 18px;
         color: #16a085;
     }
-    #guestList {
-        margin-top: 20px;
-        padding: 15px;
-        background: #f0f9f0;
-        border: 1px solid #16a085;
-        border-radius: 6px;
-        display: inline-block;
-        text-align: left;
-        min-width: 200px;
+
+    /* Particle Effect for Like Button */
+    .particle {
+        position: absolute;
+        font-size: 20px;
+        animation: burst 1s ease-out forwards;
     }
+
+    @keyframes burst {
+        0% { transform: scale(1) translate(0, 0); opacity: 1; }
+        100% { transform: scale(2) translate(0, -100px); opacity: 0; }
+    }
+
   </style>
 </head>
 <body>
@@ -56,59 +128,75 @@
 <div class="invite-box">
   <h1>☘️ Bruno's St. Paddy's Bash ☘️</h1>
   <p>Hey, alright ye, listen up! 🍻</p>
+  <p>Since my birthday lands in the same day of St. Paddy’s, I thought:
+    **“Let’s gather in advance!”**</p>
+  <p>So, I’m having a **mighty craic** at me **gaff** with me **legendary mates**.</p>
 
   <p><strong>📅 Date:</strong> 16th of March</p>
   <p><strong>🕑 Time:</strong> 2:00 PM</p>
   <p><strong>📍 Location:</strong> My gaff - 24 Loreto Park, Rathfarnham, D14 F990</p>
 
-  <button class="like-button" onclick="showLikes()">💚 Like</button>
-  <div id="likeCounter">Likes: 0</div>
+  <p>🎩 **Bring St. Paddy's gear! No green? The leprechauns will curse ya!** ☠️</p>
 
+  <div class="leprechaun" id="leprechaun">🍀👨‍🦰💰</div>
+
+  <!-- Input to confirm presence -->
   <div class="input-container">
     <input type="text" id="guestName" placeholder="Confirm your presence">
     <button class="ok-button" onclick="addGuest()">OK</button>
   </div>
+
+  <!-- Like Button -->
+  <button class="like-button" onclick="showLikes()">💚 Like</button>
+
+  <!-- Like Counter -->
+  <div id="likeCounter">Likes: 0</div>
 </div>
 
+<!-- Guest List -->
 <div id="guestList">
   <h3>Guest List:</h3>
   <ul id="guestNames"></ul>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
-
 <script>
-  const firebaseConfig = {
-      apiKey: "AIzaSyCrH4hvJwcznI4Amm_o5-ntRyyPc82Weo",
-      authDomain: "invite-bjj.firebaseapp.com",
-      databaseURL: "https://invite-bjj-default-rtdb.firebaseio.com/",
-      projectId: "invite-bjj",
-      storageBucket: "invite-bjj.appspot.com",
-      messagingSenderId: "757480408480",
-      appId: "1:757480408480:web:fad6c213de6f70ff1e88dd",
-  };
+  let likeCount = 0;
 
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+  function showLikes() {
+      likeCount++;
+      document.getElementById("likeCounter").innerText = "Likes: " + likeCount;
 
-  function loadData() {
-      db.ref("likes").on("value", (snapshot) => {
-          document.getElementById("likeCounter").innerText = `Likes: ${snapshot.val() || 0}`;
-      });
+      // Particle Effect
+      for (let i = 0; i < 10; i++) {
+          let particle = document.createElement("div");
+          particle.classList.add("particle");
+          particle.innerHTML = Math.random() > 0.5 ? "🌈" : "☘️";
+          particle.style.left = (Math.random() * 200 - 100) + "px";
+          particle.style.animationDuration = (0.8 + Math.random()) + "s";
 
-      db.ref("guests").on("value", (snapshot) => {
-          const guestList = document.getElementById("guestNames");
-          guestList.innerHTML = "";
-          snapshot.forEach(child => {
-              const li = document.createElement("li");
-              li.textContent = child.val();
-              guestList.appendChild(li);
-          });
-      });
+          document.body.appendChild(particle);
+
+          setTimeout(() => particle.remove(), 1000);
+      }
   }
 
-  document.addEventListener("DOMContentLoaded", loadData);
+  function addGuest() {
+      const guestInput = document.getElementById("guestName");
+      const guestList = document.getElementById("guestNames");
+
+      if (guestInput.value.trim() !== "") {
+          const li = document.createElement("li");
+          li.textContent = guestInput.value;
+          guestList.appendChild(li);
+          guestInput.value = "";
+      }
+  }
+
+  // Leprechaun jumps when scrolling
+  window.addEventListener("scroll", function () {
+      let lep = document.getElementById("leprechaun");
+      lep.style.transform = `translateY(${window.scrollY / 10}px)`;
+  });
 </script>
 
 </body>
