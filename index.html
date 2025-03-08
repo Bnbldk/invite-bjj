@@ -152,22 +152,15 @@
 
   <p>🎩 **Bring St. Paddy's gear! No green? The leprechauns will curse ya!** ☠️</p>
 
-  <div class="leprechaun">🍀👨‍🦰💰</div>
+  <button class="like-button" onclick="showLikes()">💚 Like</button>
+  <div id="likeCounter">Likes: 0</div>
 
-  <!-- Input for confirming attendance -->
   <div class="input-container">
     <input type="text" id="guestName" placeholder="Confirm your presence">
     <button class="ok-button" onclick="addGuest()">OK</button>
   </div>
-
-  <!-- Like Button -->
-  <button class="like-button" onclick="showLikes()">💚 Like</button>
-
-  <!-- Like Counter -->
-  <div id="likeCounter">Likes: 0</div>
 </div>
 
-<!-- Guest List -->
 <div id="guestList">
   <h3>Guest List:</h3>
   <ul id="guestNames"></ul>
@@ -178,7 +171,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
 
 <script>
-  // Firebase Configuration with Realtime Database
+  // Firebase Configuration
   const firebaseConfig = {
       apiKey: "AIzaSyCrH4hvJwcznI4Amm_o5-ntRyyPc82Weo",
       authDomain: "invite-bjj.firebaseapp.com",
@@ -186,15 +179,13 @@
       projectId: "invite-bjj",
       storageBucket: "invite-bjj.appspot.com",
       messagingSenderId: "757480408480",
-      appId: "1:757480408480:web:fad6c213de6f70ff1e88dd",
-      measurementId: "G-7WY9GWH2MS"
+      appId: "1:757480408480:web:fad6c213de6f70ff1e88dd"
   };
 
   // Initialize Firebase
   const app = firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // Load initial data
   function loadData() {
       db.ref("likes").on("value", (snapshot) => {
           document.getElementById("likeCounter").innerText = `Likes: ${snapshot.val() || 0}`;
@@ -211,24 +202,28 @@
       });
   }
 
-  // Save likes safely
   function showLikes() {
-      db.ref("likes").transaction((currentLikes) => (currentLikes || 0) + 1);
+      db.ref("likes").transaction((currentLikes) => {
+          return (currentLikes || 0) + 1;
+      }).then(() => {
+          console.log("✅ Like added!");
+      }).catch((error) => {
+          console.error("❌ Error updating likes:", error);
+      });
   }
 
-  // Save guest name
   function addGuest() {
       const guestInput = document.getElementById("guestName");
       if (guestInput.value.trim() !== "") {
-          db.ref("guests").push(guestInput.value);
+          db.ref("guests").push(guestInput.value)
+              .then(() => console.log("✅ Guest added!"))
+              .catch((error) => console.error("❌ Error adding guest:", error));
+
           guestInput.value = "";
       }
   }
 
-  // Load data on page load
-  document.addEventListener("DOMContentLoaded", function () {
-      loadData();
-  });
+  document.addEventListener("DOMContentLoaded", loadData);
 </script>
 
 </body>
