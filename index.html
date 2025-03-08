@@ -117,12 +117,12 @@
     document.getElementById('likeCounter').innerText = "Likes: " + likeCount;
   });
 
-  // Function to add likes
-  function addLike() {
+  // Function to add a like
+  window.addLike = function() {
     runTransaction(likeRef, (currentLikes) => {
-      return (currentLikes || 0) + 1;
+        return (currentLikes || 0) + 1;
     });
-  }
+  };
 </script>
 
 </body>
