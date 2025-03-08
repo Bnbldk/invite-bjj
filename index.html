@@ -229,6 +229,63 @@
       }
   }
 </script>
+<!-- Adiciona Firebase via CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
 
+<script>
+  // 🔥 Sua Configuração do Firebase
+  const firebaseConfig = {
+      apiKey: "AIzaSyCrH4hvJwcznI4Amm_o5-ntRyyPc82Weo",
+      authDomain: "invite-bjj.firebaseapp.com",
+      projectId: "invite-bjj",
+      storageBucket: "invite-bjj.appspot.com",
+      messagingSenderId: "757480408480",
+      appId: "1:757480408480:web:fad6c213de6f70ff1e88dd",
+      measurementId: "G-7WY9GWH2MS"
+  };
+
+  // Inicializa Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  let likeCount = 0;
+
+  // Carregar dados iniciais do Firebase
+  function loadData() {
+      db.ref("likes").on("value", (snapshot) => {
+          likeCount = snapshot.val() || 0;
+          document.getElementById("likeCounter").innerText = `Likes: ${likeCount}`;
+      });
+
+      db.ref("guests").on("value", (snapshot) => {
+          const guestList = document.getElementById("guestNames");
+          guestList.innerHTML = "";
+          snapshot.forEach(child => {
+              const li = document.createElement("li");
+              li.textContent = child.val();
+              guestList.appendChild(li);
+          });
+      });
+  }
+
+  // Salvar curtidas no Firebase
+  function showLikes() {
+      likeCount++;
+      db.ref("likes").set(likeCount);
+  }
+
+  // Adicionar nome do convidado no Firebase
+  function addGuest() {
+      const guestInput = document.getElementById("guestName");
+      if (guestInput.value.trim() !== "") {
+          db.ref("guests").push(guestInput.value);
+          guestInput.value = "";
+      }
+  }
+
+  // Carregar dados ao abrir a página
+  window.onload = loadData;
+</script>
 </body>
 </html>
