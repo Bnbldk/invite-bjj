@@ -5,18 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bruno's St. Paddy's Bash ☘️</title>
   <style>
-    /* Updated Color Theme with Soft Gradients */
     body {
         background: linear-gradient(to right, #e6f9e6, #d4edda);
         color: #1e392a;
         font-family: 'Courier New', monospace;
         text-align: center;
         padding: 20px;
-        transition: background 0.5s ease-in-out;
         overflow-x: hidden;
     }
-
-    /* Invitation Box */
     .invite-box {
         background: white;
         border: 2px solid #16a085;
@@ -25,83 +21,9 @@
         max-width: 500px;
         margin: 50px auto;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         position: relative;
-        overflow: hidden;
     }
-
-    .invite-box:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    h1 {
-        font-size: 26px;
-        color: #16a085;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    p {
-        font-size: 17px;
-        line-height: 1.4;
-    }
-
-    /* Animated Leprechaun */
-    .leprechaun {
-        font-size: 40px;
-        margin: 10px 0;
-        animation: floatLeprechaun 2s infinite alternate ease-in-out;
-    }
-
-    @keyframes floatLeprechaun {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(-5px); }
-    }
-
-    /* Input and Button */
-    .input-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 15px;
-        align-items: center;
-        gap: 10px;
-    }
-
-    input {
-        background: #e6f9e6;
-        border: 1px solid #16a085;
-        padding: 10px;
-        color: #1e392a;
-        font-family: 'Courier New', monospace;
-        border-radius: 6px;
-        text-align: center;
-        width: 60%;
-        transition: box-shadow 0.3s ease-in-out;
-    }
-
-    input:focus {
-        box-shadow: 0 0 10px #16a08588;
-        outline: none;
-    }
-
-    .ok-button {
-        background-color: #16a085;
-        color: white;
-        font-size: 16px;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .ok-button:hover {
-        background-color: #1abc9c;
-        transform: scale(1.05);
-    }
-
-    /* Button and Like Counter */
-    .like-button {
+    .like-button, .ok-button {
         background-color: #16a085;
         color: white;
         font-size: 16px;
@@ -112,19 +34,11 @@
         margin-top: 20px;
         transition: 0.3s;
     }
-
-    .like-button:hover {
-        background-color: #1abc9c;
-        transform: scale(1.05);
-    }
-
     #likeCounter {
         margin-top: 10px;
         font-size: 18px;
         color: #16a085;
     }
-
-    /* Guest List */
     #guestList {
         margin-top: 20px;
         padding: 15px;
@@ -134,7 +48,6 @@
         display: inline-block;
         text-align: left;
         min-width: 200px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
   </style>
 </head>
@@ -143,42 +56,29 @@
 <div class="invite-box">
   <h1>☘️ Bruno's St. Paddy's Bash ☘️</h1>
   <p>Hey, alright ye, listen up! 🍻</p>
-  <p>Since my birthday falls on the same day as St. Paddy’s, I thought, “Let’s celebrate early!”</p>
-  <p>So, I’m having a mighty craic at me gaff with me legendary mates.</p>
 
   <p><strong>📅 Date:</strong> 16th of March</p>
   <p><strong>🕑 Time:</strong> 2:00 PM</p>
   <p><strong>📍 Location:</strong> My gaff - 24 Loreto Park, Rathfarnham, D14 F990</p>
 
-  <p>🎩 **Bring St. Paddy's gear! No green? The leprechauns will curse ya!** ☠️</p>
+  <button class="like-button" onclick="showLikes()">💚 Like</button>
+  <div id="likeCounter">Likes: 0</div>
 
-  <div class="leprechaun">🍀👨‍🦰💰</div>
-
-  <!-- Input for confirming attendance -->
   <div class="input-container">
     <input type="text" id="guestName" placeholder="Confirm your presence">
     <button class="ok-button" onclick="addGuest()">OK</button>
   </div>
-
-  <!-- Like Button -->
-  <button class="like-button" onclick="showLikes()">💚 Like</button>
-
-  <!-- Like Counter -->
-  <div id="likeCounter">Likes: 0</div>
 </div>
 
-<!-- Guest List -->
 <div id="guestList">
   <h3>Guest List:</h3>
   <ul id="guestNames"></ul>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
 
 <script>
-  // Firebase Configuration with Realtime Database
   const firebaseConfig = {
       apiKey: "AIzaSyCrH4hvJwcznI4Amm_o5-ntRyyPc82Weo",
       authDomain: "invite-bjj.firebaseapp.com",
@@ -187,14 +87,11 @@
       storageBucket: "invite-bjj.appspot.com",
       messagingSenderId: "757480408480",
       appId: "1:757480408480:web:fad6c213de6f70ff1e88dd",
-      measurementId: "G-7WY9GWH2MS"
   };
 
-  // Initialize Firebase
   const app = firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // Load initial data
   function loadData() {
       db.ref("likes").on("value", (snapshot) => {
           document.getElementById("likeCounter").innerText = `Likes: ${snapshot.val() || 0}`;
@@ -211,24 +108,7 @@
       });
   }
 
-  // Save likes safely
-  function showLikes() {
-      db.ref("likes").transaction((currentLikes) => (currentLikes || 0) + 1);
-  }
-
-  // Save guest name
-  function addGuest() {
-      const guestInput = document.getElementById("guestName");
-      if (guestInput.value.trim() !== "") {
-          db.ref("guests").push(guestInput.value);
-          guestInput.value = "";
-      }
-  }
-
-  // Load data on page load
-  document.addEventListener("DOMContentLoaded", function () {
-      loadData();
-  });
+  document.addEventListener("DOMContentLoaded", loadData);
 </script>
 
 </body>
