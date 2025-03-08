@@ -83,13 +83,43 @@
         color: #16a085;
     }
 
-    .input-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 15px;
-        align-items: center;
-        gap: 10px;
-    }
+/* Input and Button Container */
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px; /* Ensures space between input and button */
+}
+
+/* OK Button */
+.ok-button {
+    background-color: #16a085;
+    color: white;
+    margin-top: 1px;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    height: 35px; /* Ensures same height as input */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Button Hover Effect */
+.ok-button:hover {
+    background-color: #1abc9c;
+    transform: scale(1.05);
+}
+
+/* Disabled Button Styling */
+.ok-button:disabled {
+    background-color: #b2beb5;
+    cursor: not-allowed;
+}
 
     input {
         background: #e6f9e6;
@@ -174,7 +204,7 @@
   <!-- Animation Container -->
   <div class="like-animation" id="likeAnimation"></div>
 
-  <!-- Input for Guest Name -->
+  <!-- Input and Button for Guest Confirmation -->
   <div class="input-container">
     <input type="text" id="guestName" placeholder="Confirm your presence">
     <button class="ok-button" id="confirmButton" onclick="addGuest()">OK</button>
