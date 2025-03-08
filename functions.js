@@ -9,12 +9,33 @@ onValue(likeRef, (snapshot) => {
     document.getElementById('likeCounter').innerText = "Likes: " + likeCount;
 });
 
-// Function to add likes
+// Function to add likes and trigger animation
 window.addLike = function() {
     runTransaction(likeRef, (currentLikes) => {
         return (currentLikes || 0) + 1;
     });
+
+    showLikes(); // Call animation function
 };
+
+// Function to show like animation
+function showLikes() {
+    const likeContainer = document.getElementById("likeAnimation");
+
+    for (let i = 0; i < 8; i++) {
+        const icon = document.createElement("div");
+        icon.classList.add("icon");
+
+        // Change red heart ❤️ to green 💚
+        icon.innerHTML = Math.random() > 0.5 ? "👍" : "💚";
+
+        icon.style.left = Math.random() * 200 - 100 + "px";
+        icon.style.animationDuration = (1.5 + Math.random()) + "s"; // Slower float effect
+        likeContainer.appendChild(icon);
+
+        setTimeout(() => icon.remove(), 2000); // Extended lifetime
+    }
+}
 
 // Guest List Reference
 const guestListRef = ref(database, 'guestList');

@@ -15,6 +15,24 @@
         overflow-x: hidden;
     }
 
+.like-animation {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.icon {
+    position: absolute;
+    font-size: 40px; /* Increased emoji size */
+    animation: floatUp 2s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-140px) scale(1.8); opacity: 0; } /* Larger float distance */
+}
     .invite-box {
         background: white;
         border: 2px solid #16a085;
@@ -110,6 +128,9 @@
   <!-- Like Button -->
   <button class="like-button" onclick="addLike()">💚 Like</button>
   <div id="likeCounter">Likes: 0</div>
+
+  <!-- Animation Container -->
+  <div class="like-animation" id="likeAnimation"></div>
 
   <!-- Input for Guest Name -->
   <div class="input-container">
