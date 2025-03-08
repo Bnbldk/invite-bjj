@@ -1,29 +1,30 @@
-name: Deploy to Firebase
+name: Build and Deploy to GitHub Pages with Firebase Secrets
 
 on:
   push:
     branches:
-      - main  # Change to your branch if needed
+      - main  # Change if your branch is different
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v18
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Create .env file
+      - name: Inject Firebase Secrets into `firebase.js`
         run: |
-          echo "FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> .env
-          echo "FIREBASE_DATABASE_URL=${{ secrets.FIREBASE_DATABASE_URL }}" >> .env
-          echo "FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}" >> .env
-          echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env
+          sed -i 's|__FIREBASE_API_KEY__|${{ secrets.FIREBASE_API_KEY }}|g' firebase.js
+          sed -i 's|__FIREBASE_AUTH_DOMAIN__|${{ secrets.FIREBASE_AUTH_DOMAIN }}|g' firebase.js
+          sed -i 's|__FIREBASE_DATABASE_URL__|${{ secrets.FIREBASE_DATABASE_URL }}|g' firebase.js
+          sed -i 's|__FIREBASE_PROJECT_ID__|${{ secrets.FIREBASE_PROJECT_ID }}|g' firebase.js
+          sed -i 's|__FIREBASE_STORAGE_BUCKET__|${{ secrets.FIREBASE_STORAGE_BUCKET }}|g' firebase.js
+          sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}|g' firebase.js
+          sed -i 's|__FIREBASE_APP_ID__|${{ secrets.FIREBASE_APP_ID }}|g' firebase.js
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public  # Change if using a different build directory
