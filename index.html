@@ -182,7 +182,7 @@
   const firebaseConfig = {
       apiKey: "AIzaSyCrH4hvJwcznI4Amm_o5-ntRyyPc82Weo",
       authDomain: "invite-bjj.firebaseapp.com",
-      databaseURL: "https://invite-bjj-default-rtdb.firebaseio.com/",  // ✅ Corrected!
+      databaseURL: "https://invite-bjj-default-rtdb.firebaseio.com/",
       projectId: "invite-bjj",
       storageBucket: "invite-bjj.appspot.com",
       messagingSenderId: "757480408480",
@@ -197,8 +197,7 @@
   // Load initial data
   function loadData() {
       db.ref("likes").on("value", (snapshot) => {
-          const likeCount = snapshot.val() || 0;
-          document.getElementById("likeCounter").innerText = `Likes: ${likeCount}`;
+          document.getElementById("likeCounter").innerText = `Likes: ${snapshot.val() || 0}`;
       });
 
       db.ref("guests").on("value", (snapshot) => {
@@ -214,8 +213,7 @@
 
   // Save likes safely
   function showLikes() {
-      const likesRef = db.ref("likes");
-      likesRef.transaction((currentLikes) => (currentLikes || 0) + 1);
+      db.ref("likes").transaction((currentLikes) => (currentLikes || 0) + 1);
   }
 
   // Save guest name
