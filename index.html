@@ -18,37 +18,28 @@
 <p>Likes: <span id="likeCount">0</span></p>
 <button onclick="addLike()">👍 Like</button>
 
-<script>
-  // Step 3: Add Firebase Configuration
+<<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDD4p1KU_EcVJve8cGe6ufMllwu-sonCPg",
+    authDomain: "bruno-invite-bjj.firebaseapp.com",
+    projectId: "bruno-invite-bjj",
+    storageBucket: "bruno-invite-bjj.firebasestorage.app",
+    messagingSenderId: "405981974320",
+    appId: "1:405981974320:web:78d5f019db2631ada702f5",
+    measurementId: "G-JQPVJJECVT"
   };
 
-  // Step 4: Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-
-  // Step 5: Reference the Like Count in Firebase
-  const likesRef = database.ref('likes');
-
-  // Step 6: Retrieve the Like Count
-  likesRef.on('value', (snapshot) => {
-      const likeCount = snapshot.val() || 0;
-      document.getElementById('likeCount').innerText = likeCount;
-  });
-
-  // Step 7: Increase Like Count
-  function addLike() {
-      likesRef.transaction((currentLikes) => {
-          return (currentLikes || 0) + 1;
-      });
-  }
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
 </script>
 
 </body>
