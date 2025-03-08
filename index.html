@@ -59,10 +59,18 @@
         font-size: 17px;
     }
 
+/* Encouraging Like Button Text */
+#likeText {
+    font-size: 15px;
+    color: #16a085;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
     .like-button, .ok-button {
         background-color: #16a085;
         color: white;
-        font-size: 16px;
+        font-size: 20px;
         padding: 10px 20px;
         border: none;
         border-radius: 6px;
@@ -203,7 +211,9 @@
   <p><strong>📅 Date:</strong> 16th of March</p>
   <p><strong>🕑 Time:</strong> 2:00 PM</p>
   <p><strong>📍 Location:</strong> My gaff - 24 Loreto Park, Rathfarnham, D14 F990</p>
-  <!-- Like Button -->
+
+  <!-- Like Button Section with Encouraging Text -->
+  <p id="likeText">Hit the like button! 👍</p>
   <button class="like-button" onclick="addLike()">💚 Like</button>
   <div id="likeCounter">Likes: 0</div>
 
