@@ -46,61 +46,7 @@
         line-height: 1.4;
     }
 
-    /* Animated Leprechaun */
-    .leprechaun {
-        font-size: 40px;
-        margin: 10px 0;
-        animation: floatLeprechaun 2s infinite alternate ease-in-out;
-    }
-
-    @keyframes floatLeprechaun {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(-5px); }
-    }
-
-    /* Input and Button */
-    .input-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 15px;
-        align-items: center;
-        gap: 10px;
-    }
-
-    input {
-        background: #e6f9e6;
-        border: 1px solid #16a085;
-        padding: 10px;
-        color: #1e392a;
-        font-family: 'Courier New', monospace;
-        border-radius: 6px;
-        text-align: center;
-        width: 60%;
-        transition: box-shadow 0.3s ease-in-out;
-    }
-
-    input:focus {
-        box-shadow: 0 0 10px #16a08588;
-        outline: none;
-    }
-
-    .ok-button {
-        background-color: #16a085;
-        color: white;
-        font-size: 16px;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .ok-button:hover {
-        background-color: #1abc9c;
-        transform: scale(1.05);
-    }
-
-    /* Button and Like Counter */
+    /* Like Button */
     .like-button {
         background-color: #16a085;
         color: white;
@@ -123,40 +69,6 @@
         font-size: 18px;
         color: #16a085;
     }
-
-    /* Guest List */
-    #guestList {
-        margin-top: 20px;
-        padding: 15px;
-        background: #f0f9f0;
-        border: 1px solid #16a085;
-        border-radius: 6px;
-        display: inline-block;
-        text-align: left;
-        min-width: 200px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Floating Likes */
-    .like-animation {
-        position: fixed;
-        bottom: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        pointer-events: none;
-    }
-
-    .icon {
-        position: absolute;
-        font-size: 24px;
-        animation: floatUp 1.5s ease-out forwards;
-    }
-
-    @keyframes floatUp {
-        0% { transform: translateY(0) scale(1); opacity: 1; }
-        100% { transform: translateY(-120px) scale(1.5); opacity: 0; }
-    }
-
   </style>
 </head>
 <body>
@@ -164,86 +76,29 @@
 <div class="invite-box">
   <h1>☘️ Bruno's St. Paddy's Bash ☘️</h1>
   <p>Hey, alright ye, listen up! 🍻</p>
-  <p>Since my birthday lands in the same day of St. Paddy’s, I thought:
-    **“Let’s gather in advance!”**</p>
+  <p>Since my birthday lands in the same day of St. Paddy’s, I thought: **“Let’s gather in advance!”**</p>
   <p>So, I’m having a **mighty craic** at me **gaff** with me **legendary mates**.</p>
 
   <p><strong>📅 Date:</strong> 16th of March</p>
   <p><strong>🕑 Time:</strong> 2:00 PM</p>
   <p><strong>📍 Location:</strong> My gaff - 24 Loreto Park, Rathfarnham, D14 F990</p>
 
-  <p>🎩 **Bring St. Paddy's gear! No green? The leprechauns will curse ya!** ☠️</p>
-
-  <div class="leprechaun">🍀👨‍🦰💰</div>
-
-  <!-- Input para adicionar nome -->
-  <div class="input-container">
-    <input type="text" id="guestName" placeholder="Confirm your presence">
-    <button class="ok-button" onclick="addGuest()">OK</button>
-  </div>
-
-  <!-- Botão de like -->
-  <button class="like-button" onclick="showLikes()">💚 Like</button>
-
-  <!-- Contador de Likes -->
+  <button class="like-button" onclick="addLike()">💚 Like</button>
   <div id="likeCounter">Likes: 0</div>
 </div>
 
-<!-- Lista de convidados -->
-<div id="guestList">
-  <h3>Guest List:</h3>
-  <ul id="guestNames"></ul>
-</div>
-
-<div class="like-animation" id="likeAnimation"></div>
-
-<script>
-  let likeCount = 0;
-
-  function showLikes() {
-      likeCount++;
-      document.getElementById("likeCounter").innerText = "Likes: " + likeCount;
-
-      const likeContainer = document.getElementById("likeAnimation");
-
-      for (let i = 0; i < 8; i++) {
-          const icon = document.createElement("div");
-          icon.classList.add("icon");
-          icon.innerHTML = Math.random() > 0.5 ? "👍" : "❤️";
-          icon.style.left = Math.random() * 200 - 100 + "px";
-          icon.style.animationDuration = (1 + Math.random()) + "s";
-          likeContainer.appendChild(icon);
-
-          setTimeout(() => icon.remove(), 1500);
-      }
-  }
-
-  function addGuest() {
-      const guestInput = document.getElementById("guestName");
-      const guestList = document.getElementById("guestNames");
-
-      if (guestInput.value.trim() !== "") {
-          const li = document.createElement("li");
-          li.textContent = guestInput.value;
-          guestList.appendChild(li);
-          guestInput.value = "";
-      }
-  }
-</script>
 <script type="module">
-  // Import the functions you need from the SDKs you need
+  // Import Firebase SDKs
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  // Firebase Configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDD4p1KU_EcVJve8cGe6ufMllwu-sonCPg",
     authDomain: "bruno-invite-bjj.firebaseapp.com",
+    databaseURL: "https://bruno-invite-bjj-default-rtdb.firebaseio.com/",
     projectId: "bruno-invite-bjj",
-    storageBucket: "bruno-invite-bjj.firebasestorage.app",
+    storageBucket: "bruno-invite-bjj.appspot.com",
     messagingSenderId: "405981974320",
     appId: "1:405981974320:web:78d5f019db2631ada702f5",
     measurementId: "G-JQPVJJECVT"
@@ -251,7 +106,24 @@
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  const database = getDatabase(app);
+
+  // Reference to like counter in Firebase
+  const likeRef = ref(database, 'likeCounter');
+
+  // Function to retrieve and display likes
+  onValue(likeRef, (snapshot) => {
+    const likeCount = snapshot.val() || 0;
+    document.getElementById('likeCounter').innerText = "Likes: " + likeCount;
+  });
+
+  // Function to add likes
+  function addLike() {
+    runTransaction(likeRef, (currentLikes) => {
+      return (currentLikes || 0) + 1;
+    });
+  }
 </script>
+
 </body>
 </html>
