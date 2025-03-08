@@ -233,11 +233,16 @@
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js"></script>
+
 <script>
-  // 🔥 Sua Configuração do Firebase
+  // 🔥 Configuração Firebase
   const firebaseConfig = {
       apiKey: "AIzaSyCrH4hvJwcznI4Amm_o5-ntRyyPc82Weo",
       authDomain: "invite-bjj.firebaseapp.com",
+      databaseURL: "https://invite-bjj-default-rtdb.firebaseio.com",
       projectId: "invite-bjj",
       storageBucket: "invite-bjj.appspot.com",
       messagingSenderId: "757480408480",
@@ -249,12 +254,10 @@
   const app = firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  let likeCount = 0;
-
-  // Carregar dados iniciais do Firebase
+  // Carregar curtidas ao abrir a página
   function loadData() {
       db.ref("likes").on("value", (snapshot) => {
-          likeCount = snapshot.val() || 0;
+          const likeCount = snapshot.val() || 0;
           document.getElementById("likeCounter").innerText = `Likes: ${likeCount}`;
       });
 
@@ -269,13 +272,15 @@
       });
   }
 
-  // Salvar curtidas no Firebase
+  // Salvar curtida no Firebase
   function showLikes() {
-      likeCount++;
-      db.ref("likes").set(likeCount);
+      const likesRef = db.ref("likes");
+      likesRef.transaction((currentLikes) => {
+          return (currentLikes || 0) + 1;  // Incrementa de forma segura
+      });
   }
 
-  // Adicionar nome do convidado no Firebase
+  // Adicionar nome ao Firebase
   function addGuest() {
       const guestInput = document.getElementById("guestName");
       if (guestInput.value.trim() !== "") {
@@ -284,7 +289,7 @@
       }
   }
 
-  // Carregar dados ao abrir a página
+  // Carregar dados ao iniciar a página
   window.onload = loadData;
 </script>
 </body>
