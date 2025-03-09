@@ -4,13 +4,13 @@ import { getDatabase, ref, onValue, push, runTransaction } from "https://www.gst
     // Load only the API key from GitHub Secrets (injected by GitHub Actions)
     const firebaseConfig = {
         apiKey: "AIzaSyDD4p1KU_EcVJve8cGe6ufMllwu-sonCPg",
-        authDomain: "__FIREBASE_AUTH_DOMAIN__",
+        authDomain: "bruno-invite-bjj.firebaseapp.com",
         databaseURL: "https://bruno-invite-bjj-default-rtdb.firebaseio.com/",
         projectId: "bruno-invite-bjj",
-        storageBucket: "__FIREBASE_STORAGE_BUCKET__",
-        messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+        storageBucket: "bruno-invite-bjj.appspot.com",
+        messagingSenderId: "405981974320",
         appId: "1:405981974320:web:78d5f019db2631ada702f5",
-        measurementId: "__FIREBASE_MEASUREMENT_ID__"
+        measurementId: "G-JQPVJJECVT"
         };
 
 // Debugging: Log Firebase API key to check if it's loading correctly
