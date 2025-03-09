@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>☘️ Bruno's St. Paddy's Bash ☘️</title>
+  <!-- Firebase Configuration -->
+  <script type="module" src="firebase.js"></script>
+  <meta property="og:image" content="https://i.postimg.cc/tJwYW8pq/Screenshot-2025-03-08-at-14-12-45.png" />
+  <meta property="og:image:width" content="640" />
+  <meta property="og:image:height" content="480" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <style>
+    body {
+        background: linear-gradient(to right, #e6f9e6, #d4edda);
+        color: #1e392a;
+        font-family: 'Courier New', monospace;
+        text-align: center;
+        padding: 20px;
+        transition: background 0.5s ease-in-out;
+        overflow-x: hidden;
+    }
+
+.like-animation {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.icon {
+    position: absolute;
+    font-size: 40px; /* Increased emoji size */
+    animation: floatUp 2s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-140px) scale(1.8); opacity: 0; } /* Larger float distance */
+}
+    .invite-box {
+        background: white;
+        border: 2px solid #16a085;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 500px;
+        margin: 50px auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    h1 {
+        font-size: 23px;
+        color: #16a085;
+    }
+
+    p {
+        font-size: 17px;
+    }
+
+/* Encouraging Like Button Text */
+#likeText {
+    font-size: 15px;
+    color: #16a085;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+    .like-button, .ok-button {
+        background-color: #16a085;
+        color: white;
+        font-size: 20px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: 0.3s;
+    }
+
+    .like-button:hover, .ok-button:hover {
+        background-color: #1abc9c;
+        transform: scale(1.05);
+    }
+
+    .like-button:disabled, .ok-button:disabled {
+        background-color: #b2beb5;
+        cursor: not-allowed;
+    }
+
+    #likeCounter {
+        margin-top: 10px;
+        font-size: 18px;
+        color: #16a085;
+    }
+
+/* Input and Button Container */
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px; /* Ensures space between input and button */
+}
+
+/* OK Button */
+.ok-button {
+    background-color: #16a085;
+    color: white;
+    margin-top: 1px;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    height: 35px; /* Ensures same height as input */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Button Hover Effect */
+.ok-button:hover {
+    background-color: #1abc9c;
+    transform: scale(1.05);
+}
+
+/* Disabled Button Styling */
+.ok-button:disabled {
+    background-color: #b2beb5;
+    cursor: not-allowed;
+}
+
+    input {
+        background: #e6f9e6;
+        border: 1px solid #16a085;
+        padding: 10px;
+        color: #1e392a;
+        font-family: 'Courier New', monospace;
+        border-radius: 6px;
+        text-align: center;
+        width: 60%;
+    }
+
+#guestList {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f0f9f0;
+    border: 1px solid #16a085;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: left;
+    min-width: 250px;
+    max-width: 90%;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-family: 'Arial', sans-serif;
+}
+
+/* ✨ Neon Glow Effect for the Guest List Header */
+#guestList h3 {
+    text-align: center; /* Centering */
+    font-size: 22px;
+    color: #16a085;
+}
+
+/* Smooth pulsing glow effect */
+@keyframes neonGlow {
+    0% {
+        text-shadow: 0 0 5px #16a085, 0 0 10px #1abc9c, 0 0 15px #0c9771;
+    }
+    100% {
+        text-shadow: 0 0 8px #1abc9c, 0 0 12px #16a085, 0 0 18px #0c9771;
+    }
+}
+
+/* Style for each guest entry */
+.guest-entry {
+    padding: 8px 10px;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.guest-entry:last-child {
+    border-bottom: none;
+}
+
+/* Beautified Timestamp */
+.guest-time {
+    font-size: 14px;
+    color: #555;
+    display: block;
+    margin-top: 2px;
+    font-style: italic;
+}
+  </style>
+</head>
+<body>
+
+<div class="invite-box">
+  <h1>☘️ Bruno's St. Paddy's Bash ☘️</h1>
+  <p> Hey, what’s the craic? what's the story? Sure ye're alright—c’mere 🍻</p>
+  <p> Since my birthday lands in the same day of St. Paddy’s, I thought: Let’s gather in advance</p>
+  <p>So, get yourselves over to me <strong>gaff</strong> for me <strong>birthday</strong> and a <strong>proper St. Patrick’s</strong> celebration!</p>
+
+  <p>Bring the kids, bring the <strong>craic</strong>, and don’t forget your <strong>greenest gear</strong> and all things <strong>Paddy’s-themed</strong>—hats, wigs, shamrocks, the whole lot! ☘️🎉</p>
+  <p><strong>📅 Date:</strong> 16th of March</p>
+  <p><strong>🕑 Time:</strong> 2:00 PM</p>
+  <p><strong>📍 Location:</strong> My gaff - 24 Loreto Park, Rathfarnham, D14 F990</p>
+
+  <!-- Like Button Section with Encouraging Text -->
+  <p id="likeText">Hit the like button! 👍</p>
+  <button class="like-button" onclick="addLike()">💚 Like</button>
+  <div id="likeCounter">Likes: 0</div>
+
+  <!-- Animation Container -->
+  <div class="like-animation" id="likeAnimation"></div>
+
+  <!-- Input and Button for Guest Confirmation -->
+  <div class="input-container">
+    <input type="text" id="guestName" placeholder="Confirm your presence">
+    <button class="ok-button" id="confirmButton" onclick="addGuest()">OK</button>
+  </div>
+
+  <!-- Guest List -->
+  <div id="guestList">
+    <h3><span class="shamrock">☘️</span> Guest List <span class="shamrock">☘️</span></h3>
+    <div id="guestNames"></div>
+  </div>
+</div>
+
+
+<!-- Functions -->
+<script type="module" src="functions.js"></script>
+
+</body>
+</html>
