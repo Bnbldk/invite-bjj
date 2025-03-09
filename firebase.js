@@ -14,7 +14,7 @@ import { getDatabase, ref, onValue, push, runTransaction } from "https://www.gst
         };
 
 // Debugging: Log Firebase API key to check if it's loading correctly
-console.log("🔥 Firebase API Key Loaded:", firebaseConfig.apiKey);
+console.log("🔥 Firebase API Key Loaded 111:", firebaseConfig.apiKey);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
