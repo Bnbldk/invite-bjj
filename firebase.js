@@ -12,12 +12,13 @@ let firebaseConfig = {
     measurementId: "G-JQPVJJECVT"
 };
 
-// 🔹 Debugging: Log to check what API key is actually loaded
-console.log("🔥 Loaded Firebase API Key:", firebaseConfig.apiKey);
-
 // ✅ Function to check and load Firebase Config dynamically
 async function loadFirebaseConfig() {
-    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("FIREBASE_API_KEY")) {
+    const isPlaceholder = !firebaseConfig.apiKey || firebaseConfig.apiKey.includes("FIREBASE_API_KEY");
+
+    console.log("🔄 Checking Firebase API Key:", isPlaceholder ? "**** (Placeholder Detected)" : "**** (Loaded Securely)");
+
+    if (isPlaceholder) {
         console.warn("⚠️ Firebase API Key is still a placeholder! Attempting to load config.js...");
         try {
             // ✅ Dynamically import `config.js` for local development
@@ -27,13 +28,12 @@ async function loadFirebaseConfig() {
         } catch (error) {
             console.warn("⚠️ Firebase configuration is missing! Using default placeholder config.");
         }
-    } else {
-        console.log("✅ Firebase config successfully loaded from Firebase Secrets.");}
+    }
 
     // ✅ Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
-    console.log("✅ Firebase Initialized Successfully with API Key:", firebaseConfig.apiKey);
+    console.log("✅ Firebase Initialized Successfully!");
 
     return { database, ref, onValue, push, runTransaction };
 }
